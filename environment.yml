@@ -1,0 +1,32 @@
+name: e10-cas9-discovery
+channels:
+  - bioconda
+  - conda-forge
+  - defaults
+dependencies:
+  - python=3.10
+  - biopython
+  - scipy
+  - pandas
+  - numpy
+  - matplotlib
+  - seaborn
+  - hmmer=3.3.2
+  - prodigal=2.6.3
+  - cd-hit
+  - clustal-omega
+  - blast
+  - pip
+  - pip:
+      - openpyxl
+      # The following tools are not on conda/pip and must be installed separately
+      # following their respective documentation:
+      #   - PILER-CR v1.06        (https://www.drive5.com/pilercr/)
+      #   - IntaRNA v3.3.1        (https://github.com/BackofenLab/IntaRNA)
+      #   - CRISPRone             (web platform; API/manual submission)
+      #   - Arnold                (terminator finder)
+      #   - NuPACK                (https://www.nupack.org/)
+      #   - ESMFold               (https://github.com/facebookresearch/esm)
+      #   - Foldseek              (https://github.com/steineggerlab/foldseek)
+      #   - Protein2PAM           (Nayfach et al., 2025)
+      #   - Dorado v1.4.0         (Oxford Nanopore basecaller; GPU required)
