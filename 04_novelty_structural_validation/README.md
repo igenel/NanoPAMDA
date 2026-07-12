@@ -47,13 +47,28 @@ otherwise noted:
 
 | Step | Script | Status |
 |---|---|---|
-| Structure prediction | *(ESMFold script)* | **Pending — to be added** |
+| Structure prediction | `00_run_esmfold.py` | Done |
+| SLURM/Singularity job wrapper (internal execution context; not required for reproduction) | `run_esmfold_slurm.sh` | Done |
 | Cartoon rendering + pLDDT coloring | `01_render_structures_pymol.py` | Done |
 | Grid figure assembly | `02_assemble_structure_grid.py` | Done |
 
-Once the ESMFold script is added, this stage's script chain will be:
-predict structure (ESMFold) → render (`01_render_structures_pymol.py`) →
+Full script chain for this stage: predict structure
+(`00_run_esmfold.py`) → render (`01_render_structures_pymol.py`) →
 assemble supplementary grid figure (`02_assemble_structure_grid.py`).
+
+`00_run_esmfold.py` is a standard ESMFold batch-inference script (based on
+the official [facebookresearch/esm](https://github.com/facebookresearch/esm)
+ESMFold example) — requires the `esm` package with ESMFold support and a
+CUDA-capable GPU. Internally this was run inside a Singularity/Apptainer
+container on an HPC cluster via `run_esmfold_slurm.sh`; that container image
+itself is not redistributed here (large, cluster-specific), but is not
+required — a standard `esm` installation is sufficient to run
+`00_run_esmfold.py` portably.
+
+Per-residue pLDDT confidence is written directly into each output PDB's
+B-factor column by ESMFold's own `output_to_pdb()` function — this is what
+`01_render_structures_pymol.py` reads for pLDDT-based coloring, confirming
+the two steps are consistent end-to-end.
 
 `01`/`02` were used to generate the Supplementary Figure showing all 16
 MAG-derived candidates selected for experimental validation, colored by
