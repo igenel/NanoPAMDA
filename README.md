@@ -11,7 +11,7 @@ Each directory corresponds to a Methods subsection in the manuscript, in pipelin
 
 | Directory | Manuscript section | Description |
 |---|---|---|
-| `01_discovery/` | 1.1–1.2 | Data ingestion, header standardization, CRISPR array detection (PILER-CR), ORF prediction (Prodigal), Cas9 HMM screening (HMMER) |
+| `01_discovery/` | 1.1–1.2 | Full discovery pipeline: header standardization → PILER-CR → Prodigal → hmmsearch + filtering → domtblout cleaning/merging → CDS coordinate mapping → 20kb CRISPR-array proximity filtering → final Cas9 candidate MultiFASTA/TSV database. See `01_discovery/README.md` for the per-script breakdown and `run_pipeline.sh` for the full orchestrated run. |
 | `02_grna_resolution/` | 1.3 | Anti-repeat mapping (CRISPRone), repeat:anti-repeat pairing (IntaRNA), terminator detection (Arnold), 2D structure (NuPACK), tracrRNA length filtering, sgRNA assembly |
 | `03_clustering/` | 1.4 | CD-HIT redundancy reduction (50% MAG arm / 90% dbGaP arm) |
 | `04_novelty_structural_validation/` | 1.5 | BLASTp novelty screening, six-reference catalytic residue MSA, domain architecture check, ESMFold structure prediction, Foldseek TM-score comparison |
