@@ -1,4 +1,4 @@
-# E10 Cas9 Discovery and Characterization
+# Cas9 Discovery and Characterization
 
 Computational pipeline and analysis code for the discovery, guide RNA resolution, structural
 validation, and PAM characterization of E10 and 31 additional candidate Cas9 orthologs mined
