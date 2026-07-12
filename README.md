@@ -1,4 +1,4 @@
-# Cas9 Discovery and Characterization
+# E10 Cas9 Discovery and Characterization
 
 Computational pipeline and analysis code for the discovery, guide RNA resolution, structural
 validation, and PAM characterization of E10 and 31 additional candidate Cas9 orthologs mined
@@ -19,7 +19,7 @@ Each directory corresponds to a Methods subsection in the manuscript, in pipelin
 | `01_discovery/` | 1.1–1.2 | Complete | Header standardization → PILER-CR → Prodigal → hmmsearch + filtering → domtblout cleaning/merging → CDS coordinate mapping → 20kb CRISPR-array proximity filtering → final Cas9 candidate MultiFASTA/TSV database. Fully scripted; see `01_discovery/README.md` for the per-script breakdown and `run_pipeline.sh` for the full orchestrated run. |
 | `02_grna_resolution/` | 1.3 | Complete | tracrRNA extraction and identification via CRISPRtracrRNA (BackofenLab), representative-element selection, terminator-truncation heuristic (scripted); tracrRNA length filtering, GYY/AR-tail motif checks, NuPACK 2D structure visualization, and sgRNA chimera assembly (manual — see `02_grna_resolution/README.md` for the full protocol). |
 | `03_clustering/` | 1.4 | Complete | Unique ID assignment → multiFASTA build → CD-HIT clustering (50% MAG arm / 90% dbGaP arm) → cluster map extraction → merge back into candidate metadata. Fully scripted. |
-| `04_novelty_structural_validation/` | 1.5 | **Pending ESMFold script** | Novelty screening (NCBI web BLAST), catalytic residue MSA (EBI Clustal Omega web server), domain architecture check (visual inspection), and Foldseek TM-score comparison (Foldseek web server) — all manual; see `04_novelty_structural_validation/README.md`. Structure prediction via ESMFold — script to be added. PyMOL rendering + supplementary figure grid assembly scripts included and tested. |
+| `04_novelty_structural_validation/` | 1.5 | Complete | Novelty screening (NCBI web BLAST), catalytic residue MSA (EBI Clustal Omega web server), domain architecture check (visual inspection), and Foldseek TM-score comparison (Foldseek web server) — all manual; see `04_novelty_structural_validation/README.md`. Structure prediction via ESMFold (`00_run_esmfold.py`), PyMOL rendering, and supplementary figure grid assembly scripts included and tested. |
 | `05_pam_prediction/` | 1.6 | Complete | In silico PAM prediction via the Protein2PAM web interface (Profluent Bio; Nayfach et al., *Nat. Biotechnol.* 2026), applied manually to the 32 final candidates. No script — protocol documented in `05_pam_prediction/README.md`. |
 | `06_htpamda_analysis/` | 1.9–1.15 | Complete | Dorado basecalling (HPC/SLURM, sup model) → custom demultiplexing (10-nt barcode pairs, Hamming distance ≤2) → PAM extraction → Illumina-baseline-corrected normalization → pseudo-first-order kinetic rate fitting → PAM preference heatmap generation. A custom reimplementation of the official HT-PAMDA pipeline (Walton et al., 2021) adapted for single-end ONT long reads. Fully scripted; see `06_htpamda_analysis/README.md`. |
 | `supplementary_tables/` | — | — | Pointers to Supplementary Data (hosted externally due to file size; see below). |
@@ -47,6 +47,7 @@ command-line tools or web servers rather than Python packages:
 - CRISPRtracrRNA ([BackofenLab/CRISPRtracrRNA](https://github.com/BackofenLab/CRISPRtracrRNA)), including its CRISPRidentify and CRISPRcasIdentifier dependencies
 - CD-HIT
 - Dorado v1.4.0 (Oxford Nanopore basecaller; GPU required)
+- ESMFold (`fair-esm` with ESMFold support; CUDA GPU required — see [facebookresearch/esm](https://github.com/facebookresearch/esm))
 - PyMOL (open-source build: `pip install pymol-open-source`) — structure rendering only
 
 **Web servers used manually** (no local installation; see the relevant subdirectory README for the exact protocol followed at each):
@@ -55,7 +56,6 @@ command-line tools or web servers rather than Python packages:
 - NuPACK — 2D gRNA secondary structure prediction
 - Foldseek web server — structural similarity / TM-score comparison
 - Protein2PAM ([Profluent-AI/protein2pam](https://github.com/Profluent-AI/protein2pam)) — PAM prediction
-- ESMFold — structure prediction (script pending; currently run manually)
 
 **Python** 3.10+: Biopython, SciPy, pandas, NumPy, matplotlib, seaborn, tqdm, openpyxl
 
