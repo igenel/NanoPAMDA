@@ -7,8 +7,8 @@ No script — performed manually via the Protein2PAM web interface.
 1. The full-length amino acid sequence of each of the 32 candidates selected
    for experimental validation (16 MAG-derived + 16 dbGaP-derived; see
    `04_novelty_structural_validation/` and Section 1.5) was submitted
-   individually to the [Protein2PAM](https://github.com/Nayfach/Protein2PAM)
-   web interface (Nayfach et al., 2025).
+   individually to the [Protein2PAM](https://github.com/Profluent-AI/protein2pam)
+   web interface (Profluent Bio; Nayfach, Bhatnagar, Novichkov, et al.).
 2. Protein2PAM's pretrained 650M-parameter protein language model (pLM)
    encoder + MLP head returns target position-specific PAM nucleotide
    probabilities for each submitted sequence.
