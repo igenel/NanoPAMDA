@@ -1,7 +1,7 @@
 # NanoPAMDA
 
 Computational pipeline and analysis code for the discovery, guide RNA resolution, structural
-validation, and PAM characterization e Cas9 orthologs minedfrom public metagenome-assembled genome (MAG)
+validation, and PAM characterization of Cas9 orthologs minedfrom public metagenome-assembled genome (MAG)
 catalogs and controlled-access dbGaP raw-read
 studies, as described in [paper citation / bioRxiv link once available].
 
