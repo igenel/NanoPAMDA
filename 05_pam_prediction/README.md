@@ -4,8 +4,8 @@ No script — performed manually via the Protein2PAM web interface.
 
 ## Protocol
 
-1. The full-length amino acid sequence of each of the 32 candidates selected
-   for experimental validation (16 MAG-derived + 16 dbGaP-derived; see
+1. The full-length amino acid sequence of each of the 14 candidates selected
+   for experimental validation (7 MAG-derived + 7 dbGaP-derived; see
    `04_novelty_structural_validation/` and Section 1.5) was submitted
    individually to the [Protein2PAM](https://github.com/Profluent-AI/protein2pam)
    web interface (Profluent Bio; Nayfach, Bhatnagar, Novichkov, et al.).
@@ -18,7 +18,7 @@ No script — performed manually via the Protein2PAM web interface.
 
 ## Note
 
-This step was applied only to the 32 final candidates, not to the full
+This step was applied only to the 14 final candidates, not to the full
 cluster-representative pool (424 MAG + 67 dbGaP) — it is a downstream
 prediction used to complement the experimental HT-PAMDA characterization
 (Sections 1.9–1.15), not a filtering/screening criterion.
