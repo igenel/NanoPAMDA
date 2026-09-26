@@ -1,11 +1,11 @@
 #!/usr/bin/env python3
 """
-Normalize ONT raw PAM counts using the Illumina untreated library as the
-t=0 baseline, with top-N enriched-PAM correction (Methods 1.13).
+Normalize ONT raw PAM counts using an untreated reference control library
+as the t=0 baseline, with top-N enriched-PAM correction (Methods 1.13).
 
 Mirrors the official HT-PAMDA pipeline's rawcount2normcount logic exactly,
-adapted to merge in a separately-sequenced Illumina control library as the
-t0 timepoint (since the ONT runs themselves only cover t=1/8/32 min).
+adapted to merge in a separately-sequenced untreated reference library as
+the t0 timepoint (since the ONT runs themselves only cover t=1/8/32 min).
 """
 import os
 import itertools
@@ -19,7 +19,7 @@ def rawcount2normcount(run_name, raw_count_csv, control_rawcount_csv,
                         control_sample, pam_orientation, pam_length, pam_start,
                         spacers, timepoints, max_pam_length=8, top_n=5):
     """
-    Normalize ONT raw counts using the Illumina untreated library as t0.
+    Normalize ONT raw counts using an untreated reference control library as t0.
     """
     print('\n=== STEP 2: rawcount2normcount ===')
     warnings.filterwarnings('ignore', category=RuntimeWarning)
@@ -29,7 +29,7 @@ def rawcount2normcount(run_name, raw_count_csv, control_rawcount_csv,
 
     df_input = pd.read_csv(raw_count_csv)
 
-    # Merge with Illumina control (provides t0)
+    # Merge with untreated reference control (provides t0)
     df_control = pd.read_csv(control_rawcount_csv)
     df_input = pd.concat([df_input, df_control], sort=False)
     control_sample_timepoint_fastq = 1  # control Raw_Counts_1 = t0
@@ -66,8 +66,8 @@ def rawcount2normcount(run_name, raw_count_csv, control_rawcount_csv,
             df['Norm_Counts_{}'.format(i)] = \
                 df[col] / df.groupby(['Sample', 'Spacer'])[col].transform('sum')
 
-    # Extract t0 from Illumina control
-    print('  setting t0 from Illumina control: ' + control_sample)
+    # Extract t0 from the untreated reference control
+    print('  setting t0 from reference control: ' + control_sample)
     control_dict = {sp: {pam: 0 for pam in total_pam_space} for sp in spacers}
     for _, row in df.iterrows():
         if row['Sample'] == control_sample:
