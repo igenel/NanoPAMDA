@@ -23,7 +23,7 @@ otherwise noted:
 
 3. **Catalytic residue conservation (both arms).** Surviving candidates
    (MAG arm) or all 67 cluster representatives (dbGaP arm, screened
-   sequentially until 16 passing candidates were found — see main Methods)
+   sequentially until 7 passing candidates were found — see main Methods)
    were aligned against a six-reference Cas9 panel (SpCas9, FnCas9,
    Nme2Cas9, Cas9, SauCas9, CjCas9) using the
    [Clustal Omega EMBL-EBI web server](https://www.ebi.ac.uk/jdispatcher/msa/clustalo).
@@ -70,7 +70,7 @@ B-factor column by ESMFold's own `output_to_pdb()` function — this is what
 `01_render_structures_pymol.py` reads for pLDDT-based coloring, confirming
 the two steps are consistent end-to-end.
 
-`01`/`02` were used to generate the Supplementary Figure showing all 16
+`01`/`02` were used to generate the Supplementary Figure showing all 7
 MAG-derived candidates selected for experimental validation, colored by
 pLDDT (AlphaFold-style 4-tier scheme). Requires PyMOL (open-source build:
 `pip install pymol-open-source`) and matplotlib.
