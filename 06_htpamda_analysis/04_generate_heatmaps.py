@@ -43,7 +43,10 @@ def rate2heatmap(run_name, barcode_csv, pam_length, pam_start,
                   log_scale=True, input_csv=None):
     """
     Generate heatmap PDFs from rate constants. Averages across spacer
-    targets and biological replicates (Methods 1.15).
+    targets (Methods 1.15). Each entry in 'Sample' (e.g.
+    'CANDIDATE_Lib1_Rep1') retains its own library/replicate identity
+    throughout -- this function does not average or otherwise combine
+    across replicates.
     """
     print('\n=== STEP 4: rate2heatmap ===')
     plt.switch_backend('agg')
