@@ -41,11 +41,11 @@ Performed on the output of step 3 above (`tracr_processed_output.tsv`):
    screened for stable hairpin formation, proper nexus architecture, and a
    distinct nexus junction.
 
-4. **sgRNA chimera assembly**, performed manually only for the final 16
+4. **sgRNA chimera assembly**, performed manually only for the final 7
    MAG-derived candidates selected for experimental validation: the
    processed repeat was linked to the truncated tracrRNA via a GAAA
    tetraloop, and the resulting 2D structure was validated a final time via
    NuPACK.
 
-2D NuPACK structures for the 16 MAG-derived candidates selected for
+2D NuPACK structures for the 7 MAG-derived candidates selected for
 experimental validation are provided in Supplementary Materials.
