@@ -1,8 +1,8 @@
 # NanoPAMDA
 
 Computational pipeline and analysis code for the discovery, guide RNA resolution, structural
-validation, and PAM characterization of Cas9 orthologs minedfrom public metagenome-assembled genome (MAG)
-catalogs and controlled-access dbGaP raw-read
+validation, and PAM characterization of Cas9 orthologs mined from public environmental metagenome
+catalogs and controlled-access human microbiome 
 studies, as described in [paper citation / bioRxiv link once available].
 
 This pipeline combines scripted, automated steps with manual/web-based curation steps at
@@ -20,8 +20,8 @@ Each directory corresponds to a Methods subsection in the manuscript, in pipelin
 | `02_grna_resolution/` | 1.3 | Complete | tracrRNA extraction and identification via CRISPRtracrRNA (BackofenLab), representative-element selection, terminator-truncation heuristic (scripted); tracrRNA length filtering, GYY/AR-tail motif checks, NuPACK 2D structure visualization, and sgRNA chimera assembly (manual — see `02_grna_resolution/README.md` for the full protocol). |
 | `03_clustering/` | 1.4 | Complete | Unique ID assignment → multiFASTA build → CD-HIT clustering (50% MAG arm / 90% dbGaP arm) → cluster map extraction → merge back into candidate metadata. Fully scripted. |
 | `04_novelty_structural_validation/` | 1.5 | Complete | Novelty screening (NCBI web BLAST), catalytic residue MSA (EBI Clustal Omega web server), domain architecture check (visual inspection), and Foldseek TM-score comparison (Foldseek web server) — all manual; see `04_novelty_structural_validation/README.md`. Structure prediction via ESMFold (`00_run_esmfold.py`), PyMOL rendering, and supplementary figure grid assembly scripts included and tested. |
-| `05_pam_prediction/` | 1.6 | Complete | In silico PAM prediction via the Protein2PAM web interface (Profluent Bio; Nayfach et al., *Nat. Biotechnol.* 2026), applied manually to the 32 final candidates. No script — protocol documented in `05_pam_prediction/README.md`. |
-| `06_htpamda_analysis/` | 1.9–1.15 | Complete | Dorado basecalling (HPC/SLURM, sup model) → custom demultiplexing (10-nt barcode pairs, Hamming distance ≤2) → PAM extraction → Illumina-baseline-corrected normalization → pseudo-first-order kinetic rate fitting → PAM preference heatmap generation. A custom reimplementation of the official HT-PAMDA pipeline (Walton et al., 2021) adapted for single-end ONT long reads. Fully scripted; see `06_htpamda_analysis/README.md`. |
+| `05_pam_prediction/` | 1.6 | Complete | In silico PAM prediction via the Protein2PAM web interface (Profluent Bio; Nayfach et al., *Nat. Biotechnol.* 2026), applied manually to the 14 final candidates. No script — protocol documented in `05_pam_prediction/README.md`. |
+| `06_htpamda_analysis/` | 1.9–1.15 | Complete | Dorado basecalling (HPC/SLURM, sup model) → custom demultiplexing (10-nt barcode pairs, Hamming distance ≤2) → PAM extraction → reference-library-corrected normalization → pseudo-first-order kinetic rate fitting → PAM preference heatmap generation. A custom reimplementation of the official HT-PAMDA pipeline (Walton et al., 2021) adapted for single-end ONT long reads. Fully scripted; see `06_htpamda_analysis/README.md`. |
 | `supplementary_tables/` | — | — | Pointers to Supplementary Data (hosted externally due to file size; see below). |
 | `data/` | — | — | Source dataset manifest (see Supplementary Table S1). |
 
@@ -32,7 +32,7 @@ Raw source data are not stored in this repository due to size. See:
 - dbGaP-derived raw sequencing data require controlled-access authorization (accessions: phs000228.v4.p1, phs002232.v1.p1) and are not redistributed here.
 - Processed candidate tables (tracrRNA-length-filtered, clustered, and final validated candidate sets — MAG and dbGaP arms) are provided as Supplementary Data files: `[Zenodo/institutional repository DOI — to be added]`.
 - Raw Nanopore sequencing data (POD5/FASTQ) generated in this study: `[SRA/ENA accession — to be added]`.
-- Plasmid maps (GenBank + rendered maps) for the E10 effector vector and the modified BPK1520 gRNA vector, ONT barcoded oligos, and gBlock/cloning oligo sequences for all 32 candidates are provided as Supplementary Data files.
+- Plasmid maps (GenBank + rendered maps) for the E10 effector vector and the modified BPK1520 gRNA vector, ONT barcoded oligos, and gBlock/cloning oligo sequences for all 14 candidates are provided as Supplementary Data files.
 
 ## Requirements
 
