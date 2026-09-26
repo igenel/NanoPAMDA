@@ -8,7 +8,7 @@ Each step mirrors the corresponding function in the official HT-PAMDA
 pipeline (Walton et al., 2021) but is reimplemented here to work on
 demultiplexed single-end ONT FASTQs (output of 00_demux_htpamda.py)
 rather than paired-end Illumina reads, using a separately-processed
-Illumina untreated library as the t=0 baseline control.
+untreated reference library as the t=0 baseline control.
 
 The full 8-nt PAM window is extracted for every read (Methods 1.12), but
 rate fitting and heatmap generation are performed on two independent
@@ -47,12 +47,14 @@ RUN_NAME = 'ONT_run_name_here'
 # Directory containing demultiplexed ONT FASTQs (output of 00_demux_htpamda.py)
 ONT_FASTQ_DIR = './demux_results'
 
-# Illumina untreated library controls (already processed via the official
-# HT-PAMDA Illumina pipeline; provides the t=0 baseline -- see Methods 1.13)
-ILLUMINA_CONTROL_LIB1 = './illumina_control/lib1_raw_counts.csv.gz'
-ILLUMINA_CONTROL_LIB2 = './illumina_control/lib2_raw_counts.csv.gz'
-ILLUMINA_CONTROL_SAMPLE_LIB1 = 'QC1_LIB1'
-ILLUMINA_CONTROL_SAMPLE_LIB2 = 'QC2_LIB2'
+# Untreated reference control libraries (a separately-sequenced, high-depth
+# library per HT-PAMDA library number; provides the t=0 baseline used to
+# normalize the ONT timepoint counts -- see Methods 1.13). Replace these
+# paths/sample names with your own reference control library outputs.
+REFERENCE_CONTROL_LIB1 = './reference_control/lib1_raw_counts.csv.gz'
+REFERENCE_CONTROL_LIB2 = './reference_control/lib2_raw_counts.csv.gz'
+REFERENCE_CONTROL_SAMPLE_LIB1 = 'QC1_LIB1'
+REFERENCE_CONTROL_SAMPLE_LIB2 = 'QC2_LIB2'
 
 # PAM parameters (Methods 1.12, 1.15)
 PAM_ORIENTATION = 'three_prime'
@@ -107,7 +109,7 @@ ONT_SAMPLES = [
 
 
 def main():
-    print('HT-PAMDA Custom Pipeline -- ONT + Illumina control')
+    print('HT-PAMDA Custom Pipeline -- ONT + reference control')
     print('Run: ' + RUN_NAME)
     print('PAM windows (start, length): {}'.format(
         [(s, PAM_LENGTH) for s in PAM_STARTS]))
@@ -128,8 +130,8 @@ def main():
         print('#' * 60)
 
         for lib, control_csv, control_sample in [
-            (1, ILLUMINA_CONTROL_LIB1, ILLUMINA_CONTROL_SAMPLE_LIB1),
-            (2, ILLUMINA_CONTROL_LIB2, ILLUMINA_CONTROL_SAMPLE_LIB2),
+            (1, REFERENCE_CONTROL_LIB1, REFERENCE_CONTROL_SAMPLE_LIB1),
+            (2, REFERENCE_CONTROL_LIB2, REFERENCE_CONTROL_SAMPLE_LIB2),
         ]:
             if lib not in raw_count_files:
                 print('\nNo data for Library {} -- skipping'.format(lib))
@@ -141,7 +143,7 @@ def main():
             print('\n' + '=' * 60)
             print('Library {} -- spacer: SPACER{} -- PAM_start {}'.format(
                 lib, lib, pam_start))
-            print('Illumina control: ' + control_sample)
+            print('Reference control: ' + control_sample)
 
             os.makedirs('output/{}'.format(run_name_lib), exist_ok=True)
             shutil.copy(raw_count_files[lib],
