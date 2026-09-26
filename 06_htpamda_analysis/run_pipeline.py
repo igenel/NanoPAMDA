@@ -10,6 +10,16 @@ demultiplexed single-end ONT FASTQs (output of 00_demux_htpamda.py)
 rather than paired-end Illumina reads, using a separately-processed
 Illumina untreated library as the t=0 baseline control.
 
+The full 8-nt PAM window is extracted for every read (Methods 1.12), but
+rate fitting and heatmap generation are performed on two independent
+4-nt marginal windows rather than the joint 8-nt distribution (Methods
+1.15): PAM_START=0 selects positions 0-3 (proximal to the spacer, i.e.
+the "first 4" of the 8N window) and PAM_START=4 selects positions 4-7
+(distal, the "last 4"). Both windows were fit and reported in the
+manuscript. This orchestrator now runs both automatically -- see
+PAM_STARTS below -- instead of requiring two separate manual runs with
+a hardcoded PAM_START.
+
 Usage:
     python run_pipeline.py
 
@@ -47,7 +57,12 @@ ILLUMINA_CONTROL_SAMPLE_LIB2 = 'QC2_LIB2'
 # PAM parameters (Methods 1.12, 1.15)
 PAM_ORIENTATION = 'three_prime'
 MAX_PAM_LENGTH = 8   # full 8xN window sequenced
-PAM_START = 4        # positions 0-3 from spacer end (first 4 of 8N)
+
+# Both marginal 4-nt windows reported in the manuscript are fit in this run.
+# With PAM_ORIENTATION='three_prime', PAM[pam_start : pam_start+pam_length]:
+#   PAM_START=0 -> positions 0-3 (proximal / "first 4" of the 8N window)
+#   PAM_START=4 -> positions 4-7 (distal   / "last 4"  of the 8N window)
+PAM_STARTS = [0, 4]
 PAM_LENGTH = 4        # core window reported in heatmaps (Methods 1.15)
 
 # Timepoints in SECONDS: 0=control(t0), 60=1min, 480=8min, 1920=32min (Methods 1.9, 1.14)
@@ -94,61 +109,71 @@ ONT_SAMPLES = [
 def main():
     print('HT-PAMDA Custom Pipeline -- ONT + Illumina control')
     print('Run: ' + RUN_NAME)
-    print('PAM: orientation={} start={} length={}'.format(
-        PAM_ORIENTATION, PAM_START, PAM_LENGTH))
+    print('PAM windows (start, length): {}'.format(
+        [(s, PAM_LENGTH) for s in PAM_STARTS]))
     print('Timepoints (s): {}'.format(TIMEPOINTS))
 
     barcode_csv = generate_heatmaps.make_barcode_csv(ONT_SAMPLES, RUN_NAME)
 
+    # PAM extraction is window-independent (full 8N window captured once);
+    # only baseline correction, kinetic modeling, and heatmap generation are
+    # repeated per marginal window below.
     raw_count_files = extract_pam_counts.ont_fastq2count(
         RUN_NAME, ONT_FASTQ_DIR, ONT_SAMPLES, SPACERS,
         TIMEPOINTS, MAX_PAM_LENGTH)
 
-    for lib, control_csv, control_sample in [
-        (1, ILLUMINA_CONTROL_LIB1, ILLUMINA_CONTROL_SAMPLE_LIB1),
-        (2, ILLUMINA_CONTROL_LIB2, ILLUMINA_CONTROL_SAMPLE_LIB2),
-    ]:
-        if lib not in raw_count_files:
-            print('\nNo data for Library {} -- skipping'.format(lib))
-            continue
+    for pam_start in PAM_STARTS:
+        print('\n' + '#' * 60)
+        print('PAM window: start={} length={}'.format(pam_start, PAM_LENGTH))
+        print('#' * 60)
 
-        lib_spacers = {'SPACER{}'.format(lib): SPACERS['SPACER{}'.format(lib)]}
-        run_name_lib = '{}_lib{}'.format(RUN_NAME, lib)
+        for lib, control_csv, control_sample in [
+            (1, ILLUMINA_CONTROL_LIB1, ILLUMINA_CONTROL_SAMPLE_LIB1),
+            (2, ILLUMINA_CONTROL_LIB2, ILLUMINA_CONTROL_SAMPLE_LIB2),
+        ]:
+            if lib not in raw_count_files:
+                print('\nNo data for Library {} -- skipping'.format(lib))
+                continue
 
-        print('\n' + '=' * 60)
-        print('Library {} -- spacer: SPACER{}'.format(lib, lib))
-        print('Illumina control: ' + control_sample)
+            lib_spacers = {'SPACER{}'.format(lib): SPACERS['SPACER{}'.format(lib)]}
+            run_name_lib = '{}_lib{}'.format(RUN_NAME, lib)
 
-        os.makedirs('output/{}'.format(run_name_lib), exist_ok=True)
-        shutil.copy(raw_count_files[lib],
-                    'output/{}/PAMDA_1_raw_counts.csv.gz'.format(run_name_lib))
+            print('\n' + '=' * 60)
+            print('Library {} -- spacer: SPACER{} -- PAM_start {}'.format(
+                lib, lib, pam_start))
+            print('Illumina control: ' + control_sample)
 
-        norm_csv = baseline_correction.rawcount2normcount(
-            run_name_lib, raw_count_files[lib], control_csv, control_sample,
-            PAM_ORIENTATION, PAM_LENGTH, PAM_START, lib_spacers, TIMEPOINTS,
-            MAX_PAM_LENGTH, TOP_N_NORMALIZE)
+            os.makedirs('output/{}'.format(run_name_lib), exist_ok=True)
+            shutil.copy(raw_count_files[lib],
+                        'output/{}/PAMDA_1_raw_counts.csv.gz'.format(run_name_lib))
 
-        rate_csv = kinetic_modeling.normcount2rate(
-            run_name_lib, PAM_LENGTH, PAM_START, TIMEPOINTS,
-            INIT_RATE_EST, READ_SUM_MIN, TPS_SUM_MIN, USE_TIMEPOINTS,
-            input_csv=norm_csv)
+            norm_csv = baseline_correction.rawcount2normcount(
+                run_name_lib, raw_count_files[lib], control_csv, control_sample,
+                PAM_ORIENTATION, PAM_LENGTH, pam_start, lib_spacers, TIMEPOINTS,
+                MAX_PAM_LENGTH, TOP_N_NORMALIZE)
 
-        lib_samples = set(
-            '{}_Lib{}_Rep{}'.format(e, l, r)
-            for _, e, l, r, _ in ONT_SAMPLES if l == lib)
-        bc_df = pd.read_csv(barcode_csv)
-        bc_df_lib = bc_df[bc_df['sample'].isin(lib_samples)]
-        bc_path_lib = 'output/{}/ont_samples_lib{}.csv'.format(RUN_NAME, lib)
-        bc_df_lib.to_csv(bc_path_lib, index=False)
+            rate_csv = kinetic_modeling.normcount2rate(
+                run_name_lib, PAM_LENGTH, pam_start, TIMEPOINTS,
+                INIT_RATE_EST, READ_SUM_MIN, TPS_SUM_MIN, USE_TIMEPOINTS,
+                input_csv=norm_csv)
 
-        generate_heatmaps.rate2heatmap(
-            run_name_lib, bc_path_lib, PAM_LENGTH, PAM_START,
-            PAM1_NT_RANK, PAM2_NT_RANK, PAM1_INDEX_RANK, PAM2_INDEX_RANK,
-            AVERAGE_SPACER, HEATMAP_FIXED_MIN, HEATMAP_FIXED_MAX,
-            LOG_SCALE_HEATMAP, input_csv=rate_csv)
+            lib_samples = set(
+                '{}_Lib{}_Rep{}'.format(e, l, r)
+                for _, e, l, r, _ in ONT_SAMPLES if l == lib)
+            bc_df = pd.read_csv(barcode_csv)
+            bc_df_lib = bc_df[bc_df['sample'].isin(lib_samples)]
+            bc_path_lib = 'output/{}/ont_samples_lib{}.csv'.format(RUN_NAME, lib)
+            bc_df_lib.to_csv(bc_path_lib, index=False)
+
+            generate_heatmaps.rate2heatmap(
+                run_name_lib, bc_path_lib, PAM_LENGTH, pam_start,
+                PAM1_NT_RANK, PAM2_NT_RANK, PAM1_INDEX_RANK, PAM2_INDEX_RANK,
+                AVERAGE_SPACER, HEATMAP_FIXED_MIN, HEATMAP_FIXED_MAX,
+                LOG_SCALE_HEATMAP, input_csv=rate_csv)
 
     print('\n' + '=' * 60)
-    print('COMPLETE. Results in output/ and figures/ subdirectories.')
+    print('COMPLETE. Results for both PAM windows are in output/ and')
+    print('figures/, separated into PAM_start_{0/4}_length_4 subdirectories.')
 
 
 if __name__ == '__main__':
