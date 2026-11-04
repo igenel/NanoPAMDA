@@ -32,7 +32,7 @@ Raw source data are not stored in this repository due to size. See:
 - dbGaP-derived raw sequencing data require controlled-access authorization (accessions: phs000228.v4.p1, phs002232.v1.p1) and are not redistributed here.
 - Processed candidate tables (tracrRNA-length-filtered, clustered, and final validated candidate sets — MAG and dbGaP arms) are provided as Supplementary Data files: `[Zenodo/institutional repository DOI — to be added]`.
 - Raw Nanopore sequencing data (POD5/FASTQ) generated in this study: `[SRA/ENA accession — to be added]`.
-- Plasmid maps (GenBank + rendered maps) for the E10 effector vector and the modified BPK1520 gRNA vector, ONT barcoded oligos, and gBlock/cloning oligo sequences for all 14 candidates are provided as Supplementary Data files.
+- Plasmid maps for the effector expression vectors and the modified BPK1520 gRNA vector, ONT barcoded oligos, and gBlock/cloning oligo sequences for all 14 candidates are provided as Supplementary Data files.
 
 ## Requirements
 

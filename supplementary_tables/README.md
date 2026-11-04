@@ -12,4 +12,4 @@ This directory is a pointer/index only — large supplementary tables are hosted
 | Table S6 | PAM decay/kinetic fit results | `[link to be added]` |
 | Fig. S | gRNA secondary structures (NuPACK, 16 MAG-derived candidates) | `[link to be added]` |
 | Fig. S | Protein structures (ESMFold/PyMOL, 16 MAG-derived candidates) | `[link to be added]` |
-| Plasmid maps | E10 effector vector + modified BPK1520 gRNA vector (.gb, .svg, .png) | `[link to be added]` |
+| Plasmid maps | Effector expression vectors + modified BPK1520 gRNA vector (.gb, .svg, .png) | `[link to be added]` |
