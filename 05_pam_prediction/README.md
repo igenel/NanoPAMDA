@@ -5,7 +5,7 @@ No script — performed manually via the Protein2PAM web interface.
 ## Protocol
 
 1. The full-length amino acid sequence of each of the 14 candidates selected
-   for experimental validation (7 MAG-derived + 7 dbGaP-derived; see
+   for experimental validation (7 environmental + 7 dbGaP-derived; see
    `04_novelty_structural_validation/` and Section 1.5) was submitted
    individually to the [Protein2PAM](https://github.com/Profluent-AI/protein2pam)
    web interface (Profluent Bio; Nayfach, Bhatnagar, Novichkov, et al.).
