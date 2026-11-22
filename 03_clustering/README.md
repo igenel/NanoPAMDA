@@ -2,7 +2,7 @@
 
 | Step | Script | Input | Output |
 |---|---|---|---|
-| 0 | `00_assign_unique_ids.py` | Merged, length-filtered candidate TSV (MAG-derived or dbGaP-derived) | Same TSV + sequential `unique_id` column (`seq_1`, `seq_2`, ...) |
+| 0 | `00_assign_unique_ids.py` | Merged, length-filtered candidate TSV (environmental or dbGaP-derived) | Same TSV + sequential `unique_id` column (`seq_1`, `seq_2`, ...) |
 | 1 | `01_build_multifasta.py` | `unique_id`-assigned candidate TSV | MultiFASTA with `>seq_N` headers |
 | 2a | `02_run_cdhit_mag_50pct.sh` | MAG-arm multiFASTA | CD-HIT representatives (50% identity) + `.clstr` file |
 | 2b | `02_run_cdhit_dbgap_90pct.sh` | dbGaP-arm multiFASTA | CD-HIT representatives (90% identity) + `.clstr` file |

@@ -6,7 +6,7 @@ structure prediction and rendering steps involved code.
 
 ## Manual protocol (no scripts — web tools)
 
-Applied to the 424 MAG-derived cluster representatives (Section 1.4) unless
+Applied to the 424 environmental cluster representatives (Section 1.4) unless
 otherwise noted:
 
 1. **Novelty screening (MAG arm only).** Each representative sequence was
@@ -71,7 +71,7 @@ B-factor column by ESMFold's own `output_to_pdb()` function — this is what
 the two steps are consistent end-to-end.
 
 `01`/`02` were used to generate the Supplementary Figure showing all 7
-MAG-derived candidates selected for experimental validation, colored by
+environmental candidates selected for experimental validation, colored by
 pLDDT (AlphaFold-style 4-tier scheme). Requires PyMOL (open-source build:
 `pip install pymol-open-source`) and matplotlib.
 

@@ -1,0 +1,13 @@
+construct,target_gene,condition,dilution_plated,plated_volume_mL,rep1_colonies,rep2_colonies,rep3_colonies
+E10 + rpoB-1,rpoB,No ATc,1e-3,0.04,88,106,70
+E10 + rpoB-1,rpoB,+ATc,1,0.04,1,2,0
+E10 + rpoB-4,rpoB,No ATc,1e-3,0.04,140,71,32
+E10 + rpoB-4,rpoB,+ATc,1,0.04,11,0,1
+E10 + gyrA-1,gyrA,No ATc,1e-3,0.04,40,20,110
+E10 + gyrA-1,gyrA,+ATc,1,0.04,4,1,0
+E10 + gyrA-2,gyrA,No ATc,1e-3,0.04,55,122,90
+E10 + gyrA-2,gyrA,+ATc,1,0.04,3,0,0
+E10 only,control,No ATc,1e-3,0.04,62,46,90
+E10 only,control,+ATc,1e-3,0.04,44,41,90
+gRNA only,control,No ATc,1e-3,0.04,270,326,320
+gRNA only,control,+ATc,1e-3,0.04,272,320,325
